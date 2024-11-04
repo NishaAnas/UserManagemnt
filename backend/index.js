@@ -5,9 +5,9 @@ dotenv.config();
 const PORT = 3000;
 
 mongoose.connect(process.env.MONGODB_CONNECT_URL).then(()=>{
-    console.log('Database Connected successfully')
+    console.log('MongoDB Connected successfully')
 }).catch((err)=>{
-    console.log(`Error in Datavase Connection: ${err}`);
+    console.log(`Error in MongoDB Connection: ${err}`);
 })
 const app = express();
 
