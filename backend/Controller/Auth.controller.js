@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import User from '../Models/UserModel.js';
-import { errorHandler } from '../utils/error.js';
+//import { errorHandler } from '../utils/error.js';
 
 export const signup = async(req, res, next) =>{
     const{ userName, email, password} = req.body;
