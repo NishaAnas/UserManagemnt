@@ -28,6 +28,17 @@ app.use('/server/user',UserRoutes);
 //Authentication Routes
 app.use('/server/auth',AuthRoutes);
 
+//Middleware for handling Error
+app.use((err,req,res,next) =>{
+const statusCode = err.statusCode || 500;
+const message = err.message || "Internal Server Error";
+return res.status(statusCode).json({
+    status:false,
+    message,
+    statusCode
+})
+})
+
 //Listening to port
 app.listen(PORT, ()=>{
     console.log(`Server Listening to port ${PORT}`);
