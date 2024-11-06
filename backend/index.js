@@ -5,6 +5,7 @@ dotenv.config();
 const PORT = 3000;
 import UserRoutes from './Routes/user.routes.js'
 import AuthRoutes from './Routes/auth.routes.js'
+import  cookieParser  from 'cookie-parser';
 
 //Connect MongoDb
 mongoose.connect(process.env.MONGODB_CONNECT_URL).then(()=>{
@@ -18,6 +19,9 @@ const app = express();
 
 //For getting JSON input as input request
 app.use(express.json());
+
+//for parsing cookies
+app.use(cookieParser());
 
 
 //Configuring Routes
