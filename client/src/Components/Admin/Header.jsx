@@ -1,6 +1,22 @@
-import { Link } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import { signOut } from '../../redux/user/userSlice'
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleSignOut = async()=>{
+    try {
+        await fetch('/server/admin/auth/adminSignout');
+        dispatch(signOut());
+        navigate("/admin/signin")
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  const { isAdmin } = useSelector((state)=>state.user);
     return (
         <div className="bg-slate-200">
         <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -14,9 +30,11 @@ function Header() {
             <Link to="/admin/userlist">
               <li>User List</li>
             </Link>
-            <Link to="/admin/signin">
-                <li>Sign-In</li>
-            </Link>
+            {isAdmin && (
+            <li onClick={handleSignOut} className="cursor-pointer">
+              Sign-Out
+            </li>
+          )}
           </ul>
         </div>
       </div>

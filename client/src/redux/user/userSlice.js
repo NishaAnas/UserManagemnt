@@ -4,6 +4,7 @@ const initialState = {
   currentUser: null,
   loading: false,
   error: false,
+  isAdmin: false,
 };
 
 const userSlice = createSlice({
@@ -18,6 +19,7 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
       state.loading = false;
       state.error = false;
+      state.isAdmin= false;
     },
     signinFailure: (state, action) => {
       state.loading = false;
@@ -50,10 +52,27 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     signOut:(state)=>{
-        state.currentUser = null;
+      state.currentUser = null;
       state.loading = false;
       state.error = false;
-    }
+      state.isAdmin = false;
+    },
+
+    // Admin Sign-in Actions
+    adminSigninStart: (state) => {
+      state.loading = true;
+      state.error = false;
+    },
+    adminSigninSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = false;
+      state.isAdmin = true; 
+    },
+    adminSigninFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -67,6 +86,9 @@ export const {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  adminSigninStart,
+  adminSigninSuccess,
+  adminSigninFailure,
   signOut
 } = userSlice.actions;
 export default userSlice.reducer;

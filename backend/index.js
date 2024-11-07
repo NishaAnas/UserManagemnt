@@ -5,6 +5,9 @@ dotenv.config();
 const PORT = 3000;
 import UserRoutes from './Routes/user.routes.js'
 import AuthRoutes from './Routes/auth.routes.js'
+import AdminAuthRoutes from './Routes/Admin/Adminauth.routes.js'
+import AdminUserRoutes from './Routes/Admin/AdminUser.routes.js'
+
 import  cookieParser  from 'cookie-parser';
 
 //Connect MongoDb
@@ -31,6 +34,12 @@ app.use('/server/user',UserRoutes);
 
 //Authentication Routes
 app.use('/server/auth',AuthRoutes);
+
+//Admin Authentication Routes
+app.use('/server/admin/auth',AdminAuthRoutes);
+
+//Admin User Routes
+app.use('/server/admin/user',AdminUserRoutes);
 
 //Middleware for handling Error
 app.use((err,req,res,next) =>{
