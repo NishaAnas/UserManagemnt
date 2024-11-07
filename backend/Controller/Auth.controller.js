@@ -63,7 +63,6 @@ export const signin = async (req, res, next) => {
     }
   };
 
-
 // Google Authentication function
 export const googleAuth = async (req, res, next) => {
   try {

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUsers, admindeleteUser, adminUpdateUser } from "../../redux/user/userSlice";
+import {
+  setUsers,
+  admindeleteUser,
+  adminUpdateUser,
+} from "../../redux/user/userSlice";
 
 function UserList() {
   const dispatch = useDispatch();
@@ -11,6 +15,10 @@ function UserList() {
 
   // State for holding user data while editing
   const [editingUser, setEditingUser] = useState(null);
+  const [error, setError] = useState('');
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   // Fetch users from the backend API on component load
   useEffect(() => {
@@ -21,12 +29,13 @@ function UserList() {
         const data = await response.json();
         // Update the Redux store with the fetched user data
         dispatch(setUsers(data));
+        setFilteredUsers(data);
       } catch (error) {
         console.error("Failed to load users:", error);
       }
     };
     fetchUsers();
-  }, [dispatch]);
+  }, [dispatch, users]);
 
   // Handle deleting a user by sending a DELETE request to the backend
   const handleDelete = async (id) => {
@@ -52,37 +61,68 @@ function UserList() {
 
   // Submit the edited user details to the backend and update Redux state
   const handleEditSubmit = async () => {
+    setError('');
     try {
-      const response = await fetch(`/server/admin/user/update/${editingUser._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userName: editingUser.userName,
-          email: editingUser.email,
-        }),
-      });
+      const response = await fetch(
+        `/server/admin/user/update/${editingUser._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userName: editingUser.userName,
+            email: editingUser.email,
+          }),
+        }
+      );
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message); // Set error from backend
+        return;
+      }
       const updatedUser = await response.json();
       // Update Redux store with the edited user details
       dispatch(adminUpdateUser(updatedUser));
       // Exit edit mode
       setEditingUser(null);
     } catch (error) {
-      console.error('Failed to update user:', error);
+      console.error("Failed to update user:", error);
     }
   };
+
+  const handleSearchChange = (e) => {
+      const query = e.target.value.toLowerCase();
+      setSearchQuery(query);
+      setFilteredUsers(
+        users.filter(
+          (user) =>
+            user.userName.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query)
+        )
+      );
+    };
 
   return (
     <div className="p-5 max-w-4xl mx-auto my-4">
       <h1 className="text-2xl font-semibold text-center">User List</h1>
 
-      {/* Create New User button */}
+      {/* Searching for user */}
       <div className="flex justify-between items-center mb-4">
-        <div className="flex-grow"></div>
-        <Link to="/admin/createUser" className="bg-blue-500 text-white p-2 rounded ml-auto">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search by name or email"
+          className="border p-2 rounded w-auto"
+        />
+        {/* Create New User button */}
+        <Link
+          to="/admin/createUser"
+          className="bg-blue-500 text-white p-2 rounded ml-auto"
+        >
           Create New User
         </Link>
       </div>
-
+      {error && <p className="text-red-500">{error}</p>}
       {/* Table displaying user data */}
       <table className="w-full bg-white rounded shadow">
         <thead>
@@ -95,7 +135,7 @@ function UserList() {
         </thead>
         <tbody>
           {/* Map over users and render each user row */}
-          {users?.map((user) => (
+          {filteredUsers?.map((user) => (
             <tr key={user._id}>
               <td className="border p-3">
                 <img
