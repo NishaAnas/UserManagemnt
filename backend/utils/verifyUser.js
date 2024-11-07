@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { errorHandler } from './error.js';
 
 export const verifyToken = (req,res,next) =>{
-    const token = req.cookies.accessToken;      //here token is not reciveing coming as undefined
+    const token = req.cookies.accessToken;
     console.log("Token received:", token);
 
     if(!token) return next(errorHandler(401,'You are not Authenticated'));

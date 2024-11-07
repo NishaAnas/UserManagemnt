@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-function About() {
-  return (
-    <div className="px-4 py-12 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4 text-slate-900">About Page</h1>
+function Dashboard() {
+    return (
+        <div className="px-4 py-12 max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4 text-slate-900">Welcome to the Admin Dashboard</h1>
       <p className="mb-4 text-slate-700">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate est
         vel consequuntur corrupti laborum unde! At voluptatem illo ad, veniam,
@@ -39,7 +39,7 @@ function About() {
         minima dolores necessitatibus corrupti!
       </p>
     </div>
-  );
+    )
 }
 
-export default About;
+export default Dashboard
