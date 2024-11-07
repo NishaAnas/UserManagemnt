@@ -14,6 +14,8 @@ import AdminDashboard from './Pages/Admin/Dashboard'
 import AdminUserList from './Pages/Admin/UserList'
 import AdminSignin from './Pages/Admin/Signin';
 import AdminSignup from './Pages/Admin/Signup';
+import CreateUser from './Pages/Admin/createUser';
+import AdminPrivateRoute from './Components/Admin/AdminPrivateRoute'
 
 function App() {
   const location = useLocation();
@@ -39,12 +41,19 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin">
             <Route path="dashboard" element={<AdminDashboard />} />
+
+            <Route element={<AdminPrivateRoute />} >
             <Route path="userlist" element={<AdminUserList />} />
+            <Route path="createUser" element={<CreateUser />} />
+            </Route>
+            
+            <Route path="createUser" element={<CreateUser />}/>
             <Route path="signin" element={<AdminSignin />} />
             <Route path="signup" element={<AdminSignup />} />
           </Route>
 
       </Routes>
+
     </>
   )
 }

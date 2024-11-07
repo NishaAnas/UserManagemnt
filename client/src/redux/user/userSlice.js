@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentUser: null,
+  users: [],
   loading: false,
   error: false,
   isAdmin: false,
@@ -73,6 +74,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    setUsers: (state, action) => {
+      state.users = action.payload; 
+    },
+    admindeleteUser: (state, action) => {
+      state.users = state.users.filter(user => user._id !== action.payload);
+    },
+    adminUpdateUser: (state, action) => {
+      const updatedUser = action.payload;
+      const index = state.users.findIndex(user => user._id === updatedUser._id);
+      if (index !== -1) {
+        state.users[index] = updatedUser;
+      }
+    },
   },
 });
 
@@ -89,6 +103,9 @@ export const {
   adminSigninStart,
   adminSigninSuccess,
   adminSigninFailure,
+  setUsers,
+  admindeleteUser,
+  adminUpdateUser,
   signOut
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -28,7 +28,9 @@ function Header() {
               <li>Dashboard</li>
             </Link>
             <Link to="/admin/userlist">
-              <li>User List</li>
+              {isAdmin && (
+                <li>User List</li>
+              )}
             </Link>
             {isAdmin && (
             <li onClick={handleSignOut} className="cursor-pointer">
