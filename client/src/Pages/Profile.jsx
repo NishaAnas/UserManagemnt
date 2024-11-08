@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateUserStart,
@@ -25,6 +25,7 @@ function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUpadteSuccess(false);
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/server/user/updateProfile/${currentUser._id}`, {
@@ -49,6 +50,7 @@ function Profile() {
   };
 
   const handleDeleteUser = async() =>{
+    setUpadteSuccess(false)
     try {
         dispatch(deleteUserStart());
         const res = await fetch(`/server/user/deleteUser/${currentUser._id}`, {
@@ -75,6 +77,7 @@ function Profile() {
         console.log(error);
     }
   }
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">

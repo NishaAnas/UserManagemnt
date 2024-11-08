@@ -32,10 +32,14 @@ function Header() {
                 <li>User List</li>
               )}
             </Link>
-            {isAdmin && (
+            {isAdmin ? (
             <li onClick={handleSignOut} className="cursor-pointer">
               Sign-Out
             </li>
+          ):(
+            <Link to="/admin/signin">
+              <li>Sign-In</li>
+            </Link>
           )}
           </ul>
         </div>

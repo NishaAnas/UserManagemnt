@@ -11,7 +11,7 @@ export const test = (req,res) =>{
 //for upadting user Profile details
 export const updateUser = async(req,res,next) =>{
     if(req.user.id!==req.params.id){
-        return next(errorHandler(401,'You have no access to this aacount'));
+        return next(errorHandler(401,'You have no access to this account'));
     }
 
     try {
@@ -32,6 +32,9 @@ export const updateUser = async(req,res,next) =>{
     const {password,...rest}=updatedUser._doc;
     res.status(200).json(rest);
     } catch (error) {
+        if (error.code === 11000) {
+            return next(errorHandler(400, 'You have no access to this email.'));
+        }
         next(error)
     }
 }

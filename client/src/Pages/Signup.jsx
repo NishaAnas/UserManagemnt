@@ -48,47 +48,48 @@ function Signup() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7"> Sign Up </h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="p-6 max-w-md mx-auto bg-white shadow-lg rounded-lg mt-10">
+      <h1 className="text-4xl text-center font-bold text-gray-800 my-6">Sign Up</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           type="text"
-          placeholder="username"
+          placeholder="Username"
           id="userName"
-          className="bg-slate-100 p-3 rounded-lg"
+          className="bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={handleChange}
         />
         <input
           type="email"
-          placeholder="email"
+          placeholder="Email"
           id="email"
-          className="bg-slate-100 p-3 rounded-lg"
+          className="bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={handleChange}
         />
         <input
           type="password"
-          placeholder="password"
+          placeholder="Password"
           id="password"
-          className="bg-slate-100 p-3 rounded-lg"
+          className="bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={handleChange}
         />
         <button
           disabled={loading}
-          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          className="bg-blue-600 text-white p-3 rounded-lg uppercase font-semibold hover:bg-blue-700 transition duration-200 disabled:opacity-75"
         >
           {loading ? "Loading..." : "Sign Up"}
         </button>
         <OAuth />
       </form>
-      <div className="flex gap-2 mt-5">
-        <p>Have an Account ?</p>
+      <div className="flex justify-center gap-1 mt-6 text-gray-600">
+        <p>Already have an account?</p>
         <Link to="/signin">
-          <span className="text-blue-500">Sign-In</span>
+          <span className="text-blue-600 hover:underline">Sign In</span>
         </Link>
       </div>
-      <p className="text-red-700 mt-5">{error && "Something went Wrong"}</p>
+      <p className="text-center text-red-600 mt-4">{error && "Something went wrong"}</p>
     </div>
-  );
+);
+
 }
 
 export default Signup;

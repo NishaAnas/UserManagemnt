@@ -21,21 +21,20 @@ function UserList() {
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   // Fetch users from the backend API on component load
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/server/admin/user/list');
+      const data = await response.json();
+      dispatch(setUsers(data));
+      setFilteredUsers(data);
+    } catch (error) {
+      console.error("Failed to load users:", error);
+    }
+  }
+  
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        // Send a request to get the user list from the backend
-        const response = await fetch("/server/admin/user/list");
-        const data = await response.json();
-        // Update the Redux store with the fetched user data
-        dispatch(setUsers(data));
-        setFilteredUsers(data);
-      } catch (error) {
-        console.error("Failed to load users:", error);
-      }
-    };
     fetchUsers();
-  }, [dispatch, users]);
+  }, [dispatch]);
 
   // Handle deleting a user by sending a DELETE request to the backend
   const handleDelete = async (id) => {
@@ -46,18 +45,18 @@ function UserList() {
     } catch (error) {
       console.error("Failed to delete user:", error);
     }
-  };
+  }
 
   // Set the selected user to editing mode
   const handleEditClick = (user) => {
     setEditingUser(user);
-  };
+  }
 
   // Update local state with changes made in the edit input fields
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditingUser((prev) => ({ ...prev, [name]: value }));
-  };
+  }
 
   // Submit the edited user details to the backend and update Redux state
   const handleEditSubmit = async () => {
@@ -73,7 +72,7 @@ function UserList() {
             email: editingUser.email,
           }),
         }
-      );
+      )
       if (!response.ok) {
         const data = await response.json();
         setError(data.message); // Set error from backend
@@ -84,22 +83,24 @@ function UserList() {
       dispatch(adminUpdateUser(updatedUser));
       // Exit edit mode
       setEditingUser(null);
+
+    // Refetch users to update UI without full page reload
+    fetchUsers();
     } catch (error) {
       console.error("Failed to update user:", error);
     }
-  };
+  }
 
   const handleSearchChange = (e) => {
-      const query = e.target.value.toLowerCase();
-      setSearchQuery(query);
-      setFilteredUsers(
-        users.filter(
-          (user) =>
-            user.userName.toLowerCase().includes(query) ||
-            user.email.toLowerCase().includes(query)
-        )
-      );
-    };
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const matchedUsers = users.filter(
+      (user) =>
+        user.userName.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query)
+    );
+    setFilteredUsers(matchedUsers);
+  }
 
   return (
     <div className="p-5 max-w-4xl mx-auto my-4">
@@ -123,6 +124,12 @@ function UserList() {
         </Link>
       </div>
       {error && <p className="text-red-500">{error}</p>}
+
+      {/* Show message if no users found in search results */}
+      {filteredUsers.length === 0 && searchQuery && (
+        <p className="text-red-500 text-center">No users found</p>
+      )}
+
       {/* Table displaying user data */}
       <table className="w-full bg-white rounded shadow">
         <thead>
